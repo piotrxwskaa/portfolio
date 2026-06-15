@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monika — UGC Creator</title>
+<meta name="description" content="UGC Creator specializing in beauty, fashion, lifestyle and wellness content. Poland, available worldwide.">
+
+<!--
+  ================================================================
+  PORTFOLIO_DATA — QUICK REFERENCE
+  All editable content is in the <script> block at the bottom.
+  Look for:  const PORTFOLIO_DATA  and  const i18n
+  ================================================================
+
+  FONTS: Loaded from Google Fonts (requires internet connection).
+  They are free and open-source — no licence issues.
+  Cormorant Garamond (display serif) + DM Sans (body sans-serif)
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   KOLORY — zmień tutaj, aby przebarwić całą stronę naraz
+   ============================================================ */
+:root {
+  --color-bg:           #FAF8F5;   /* tło strony — ciepła biel */
+  --color-cream:        #F2EDE5;   /* kremowy beż */
+  --color-taupe:        #E5DDD3;   /* jasny taupe */
+  --color-border:       #DDD6CC;   /* delikatne obramowania */
+  --color-text:         #1E1C1A;   /* tekst — prawie czarny */
+  --color-muted:        #7A7167;   /* wyciszony brązowy szary */
+  --color-accent:       #A8836A;   /* kolor akcentowy — nude terracotta */
+  --color-accent-light: #E8D9CF;   /* jasna wersja akcentu */
+
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+
+  --radius-card: 12px;
+  --radius-btn:  2px;
+  --shadow:      0 2px 20px rgba(30,28,26,0.07);
+  --shadow-hov:  0 6px 32px rgba(30,28,26,0.12);
+
+  --nav-h:    68px;
+  --gap-sect: 120px;
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+img, video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+
+/* ============================================================
+   UTILITY
+   ============================================================ */
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.section { padding: var(--gap-sect) 0; }
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  display: block;
+  margin-bottom: 20px;
+}
+.h-display {
+  font-family: var(--font-display);
+  font-size: clamp(42px, 5vw, 72px);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.h-section {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 48px;
+}
+.divider {
+  width: 40px; height: 1px;
+  background: var(--color-accent);
+  margin: 24px 0;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  border-radius: var(--radius-btn);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.btn-dark {
+  background: var(--color-text);
+  color: var(--color-bg);
+  border-color: var(--color-text);
+}
+.btn-dark:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  transform: translateY(-1px);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+.btn-ghost:hover {
+  border-color: var(--color-text);
+  background: var(--color-cream);
+  transform: translateY(-1px);
+}
+
+/* Placeholder shared styles */
+.ph-box {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px;
+  color: var(--color-muted);
+}
+.ph-icon {
+  width: 56px; height: 56px;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.ph-label {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  text-align: center;
+  padding: 0 20px;
+  line-height: 1.7;
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+#nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  background: rgba(250,248,245,0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-border);
+  z-index: 1000;
+  transition: box-shadow 0.3s ease;
+}
+#nav.scrolled { box-shadow: 0 2px 20px rgba(30,28,26,0.06); }
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--nav-h);
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+.nav-logo span { color: var(--color-accent); font-style: italic; }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--color-text); }
+
+.nav-right { display: flex; align-items: center; gap: 20px; }
+
+/* Language toggle */
+.lang-wrap {
+  display: flex;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.lang-btn {
+  padding: 6px 12px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  transition: all 0.2s;
+}
+.lang-btn.active { background: var(--color-text); color: var(--color-bg); }
+.lang-btn:hover:not(.active) { background: var(--color-cream); color: var(--color-text); }
+
+/* Burger */
+.burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+  background: none;
+  border: none;
+}
+.burger span {
+  display: block; width: 24px; height: 1px;
+  background: var(--color-text);
+  transition: all 0.3s ease;
+}
+.burger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.burger.open span:nth-child(2) { opacity: 0; }
+.burger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* Mobile drawer */
+.nav-mob {
+  display: none;
+  position: fixed;
+  top: var(--nav-h);
+  left: 0; right: 0;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  padding: 24px 32px 32px;
+  z-index: 999;
+  flex-direction: column;
+  gap: 4px;
+}
+.nav-mob.open { display: flex; }
+.nav-mob a {
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-taupe);
+}
+.nav-mob .lang-wrap { margin-top: 16px; width: fit-content; }
+
+/* ============================================================
+   SECTION 1: HERO
+   ============================================================ */
+#hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-top: var(--nav-h);
+}
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px 60px 80px 0;
+}
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: 32px;
+}
+.hero-tag::before {
+  content: '';
+  display: block;
+  width: 28px; height: 1px;
+  background: var(--color-accent);
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(52px, 6vw, 88px);
+  font-weight: 300;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.hero-title em { font-style: italic; color: var(--color-accent); }
+.hero-role {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.5vw, 30px);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--color-muted);
+  margin-bottom: 32px;
+}
+.hero-desc {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--color-muted);
+  max-width: 420px;
+  line-height: 1.75;
+  margin-bottom: 12px;
+}
+.hero-loc {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 40px;
+}
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+/* Hero visual column */
+.hero-visual {
+  position: relative;
+  height: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--color-cream);
+}
+.hero-visual img,
+.hero-visual video {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+/* HERO PLACEHOLDER — remove this block once you add your photo */
+.hero-ph {
+  background: linear-gradient(160deg, var(--color-taupe) 0%, var(--color-cream) 55%, var(--color-accent-light) 100%);
+}
+
+/* ============================================================
+   SECTION 2: SELECTED WORK
+   ============================================================ */
+#work { background: var(--color-bg); }
+
+.work-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 56px;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.work-sub {
+  font-size: 13px;
+  color: var(--color-muted);
+  max-width: 280px;
+  line-height: 1.7;
+  text-align: right;
+}
+
+.vid-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.vid-card {
+  position: relative;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: var(--color-cream);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: box-shadow 0.35s ease, transform 0.35s ease;
+  box-shadow: var(--shadow);
+}
+.vid-card:hover {
+  box-shadow: var(--shadow-hov);
+  transform: translateY(-4px);
+}
+.vid-thumb {
+  aspect-ratio: 9 / 16;
+  position: relative;
+  overflow: hidden;
+}
+/* When you add a real thumbnail, the image fills the thumb area */
+.vid-thumb img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Placeholder gradients for the 6 cards */
+.ph-grad-1 { background: linear-gradient(170deg,#E8D9CF 0%,#DDD0C4 100%); }
+.ph-grad-2 { background: linear-gradient(170deg,#E2DCD6 0%,#D4C9BE 100%); }
+.ph-grad-3 { background: linear-gradient(170deg,#EAE3D8 0%,#DDD3C5 100%); }
+.ph-grad-4 { background: linear-gradient(170deg,#E0DDD8 0%,#CFCBC6 100%); }
+.ph-grad-5 { background: linear-gradient(170deg,#E5DDD3 0%,#D8CCBF 100%); }
+.ph-grad-6 { background: linear-gradient(170deg,#EBE5DC 0%,#DED6CA 100%); }
+
+.play-btn {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: rgba(250,248,245,0.92);
+  border: none;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(4px);
+  pointer-events: none; /* card handles the click */
+}
+.vid-card:hover .play-btn { transform: translate(-50%,-50%) scale(1.08); background: var(--color-bg); }
+.play-btn svg { margin-left: 3px; }
+
+.vid-info { padding: 20px 20px 22px; }
+.vid-cat {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 6px;
+}
+.vid-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--color-text);
+  margin-bottom: 4px;
+}
+.vid-fmt { font-size: 12px; color: var(--color-muted); font-weight: 300; }
+
+/* Video modal */
+.modal-bg {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(20,18,16,0.88);
+  z-index: 2000;
+  align-items: center; justify-content: center;
+  padding: 24px;
+}
+.modal-bg.open { display: flex; }
+.modal-box {
+  position: relative;
+  width: 100%; max-width: 380px;
+  aspect-ratio: 9/16;
+  background: var(--color-cream);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 16px; color: var(--color-muted);
+}
+/* When you add real video, the <video> tag will fill this box */
+.modal-box video,
+.modal-box iframe {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: contain;
+  border: none;
+}
+.modal-ph-title {
+  font-family: var(--font-display); font-size: 14px; font-style: italic;
+}
+.modal-ph-text {
+  font-size: 12px; letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center; padding: 0 32px; line-height: 1.9; opacity: 0.65;
+}
+.modal-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(30,28,26,0.18); border: none;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 16px; line-height: 1;
+  transition: background 0.2s;
+  z-index: 10;
+}
+.modal-close:hover { background: rgba(30,28,26,0.38); }
+
+/* ============================================================
+   SECTION 3: SERVICES
+   ============================================================ */
+#services { background: var(--color-cream); }
+
+.serv-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin-bottom: 36px;
+}
+.serv-item {
+  padding: 28px 24px;
+  background: var(--color-bg);
+  transition: background 0.2s;
+}
+.serv-item:hover { background: var(--color-accent-light); }
+.serv-num {
+  font-family: var(--font-display);
+  font-size: 13px; font-style: italic;
+  color: var(--color-accent); margin-bottom: 10px;
+}
+.serv-name { font-size: 14px; font-weight: 400; }
+.serv-note {
+  font-size: 13px; color: var(--color-muted);
+  font-style: italic; max-width: 500px; line-height: 1.7;
+}
+
+/* ============================================================
+   SECTION 4: WHY WORK WITH ME
+   ============================================================ */
+#why { background: var(--color-bg); }
+
+.why-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+.why-item {
+  padding: 48px 40px;
+  background: var(--color-cream);
+  position: relative; overflow: hidden;
+  transition: background 0.25s;
+}
+.why-item:hover { background: var(--color-taupe); }
+.why-item::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 3px; height: 0;
+  background: var(--color-accent);
+  transition: height 0.35s ease;
+}
+.why-item:hover::before { height: 100%; }
+.why-h {
+  font-family: var(--font-display);
+  font-size: 22px; font-weight: 400;
+  margin-bottom: 12px; line-height: 1.3;
+}
+.why-b { font-size: 14px; color: var(--color-muted); line-height: 1.75; font-weight: 300; }
+
+/* ============================================================
+   SECTION 5: ABOUT
+   ============================================================ */
+#about { background: var(--color-bg); }
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.about-photo {
+  aspect-ratio: 3/4;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: var(--color-cream);
+  border: 1px solid var(--color-border);
+}
+.about-photo img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center top;
+}
+/* About placeholder gradient */
+.about-ph {
+  background: linear-gradient(160deg, var(--color-taupe) 20%, var(--color-accent-light) 100%);
+}
+.about-body {
+  font-size: 16px; line-height: 1.85;
+  color: var(--color-text); font-weight: 300;
+  margin-bottom: 36px;
+}
+.about-body em { font-family: var(--font-display); font-style: italic; color: var(--color-accent); }
+.meta-list { display: flex; flex-direction: column; gap: 14px; }
+.meta-row { display: flex; gap: 24px; align-items: baseline; }
+.meta-key {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--color-accent); min-width: 100px;
+}
+.meta-val { font-size: 14px; font-weight: 300; }
+
+/* ============================================================
+   SECTION 6: BRANDS
+   ============================================================ */
+#brands { background: var(--color-cream); padding: 80px 0; }
+
+.brands-grid {
+  display: flex; flex-wrap: wrap;
+  gap: 16px; margin-top: 40px;
+}
+.brand-logo {
+  width: 140px; height: 56px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--color-muted);
+  opacity: 0.7;
+  transition: opacity 0.2s, border-color 0.2s;
+  overflow: hidden;
+}
+.brand-logo:hover { opacity: 1; border-color: var(--color-accent); }
+.brand-logo img { width: 100%; height: 100%; object-fit: contain; padding: 10px; }
+
+/* ============================================================
+   SECTION 7: TESTIMONIALS
+   ============================================================ */
+#testimonials { background: var(--color-bg); padding: 80px 0 120px; }
+
+.test-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px; margin-top: 48px;
+}
+.test-card {
+  padding: 36px 32px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-cream);
+  position: relative;
+}
+.test-card::before {
+  content: '"';
+  font-family: var(--font-display);
+  font-size: 80px; color: var(--color-accent); opacity: 0.18;
+  position: absolute; top: 12px; left: 24px; line-height: 1;
+}
+.test-text {
+  font-family: var(--font-display);
+  font-size: 16px; font-style: italic; font-weight: 300;
+  line-height: 1.7; color: var(--color-text);
+  margin-bottom: 24px; min-height: 80px;
+}
+.test-name { font-size: 13px; font-weight: 500; }
+.test-brand { font-size: 11px; color: var(--color-muted); letter-spacing: 0.06em; margin-top: 2px; }
+
+/* ============================================================
+   SECTION 8: CONTACT
+   ============================================================ */
+#contact {
+  background: var(--color-text);
+  color: var(--color-bg);
+  padding: 120px 0;
+}
+.con-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+}
+.con-heading {
+  font-family: var(--font-display);
+  font-size: clamp(34px, 4vw, 58px);
+  font-weight: 300; line-height: 1.1;
+  margin-bottom: 20px;
+}
+.con-heading em { font-style: italic; color: var(--color-accent); }
+.con-sub {
+  font-size: 14px;
+  color: rgba(250,248,245,0.55);
+  line-height: 1.75; margin-bottom: 0;
+  max-width: 380px;
+}
+.con-details { display: flex; flex-direction: column; gap: 20px; }
+.con-row { display: flex; align-items: flex-start; gap: 16px; }
+.con-icon {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(250,248,245,0.15);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 2px;
+}
+.con-key {
+  font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--color-accent); margin-bottom: 2px;
+}
+.con-val { font-size: 14px; font-weight: 300; }
+.con-val a { color: var(--color-bg); transition: color 0.2s; }
+.con-val a:hover { color: var(--color-accent); }
+.con-actions { display: flex; flex-direction: column; gap: 12px; margin-top: 36px; }
+.btn-con-fill {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  background: var(--color-accent); color: var(--color-bg);
+  border: 1px solid var(--color-accent);
+  padding: 16px 36px; font-size: 12px; font-weight: 400;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  border-radius: var(--radius-btn); cursor: pointer; transition: all 0.3s; text-align: center;
+}
+.btn-con-fill:hover { background: transparent; border-color: var(--color-bg); }
+.btn-con-out {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  background: transparent; color: rgba(250,248,245,0.7);
+  border: 1px solid rgba(250,248,245,0.2);
+  padding: 14px 36px; font-size: 12px; font-weight: 400;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  border-radius: var(--radius-btn); cursor: pointer; transition: all 0.3s; text-align: center;
+}
+.btn-con-out:hover { border-color: rgba(250,248,245,0.55); color: var(--color-bg); }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  background: #141210;
+  padding: 40px 0;
+  border-top: 1px solid rgba(250,248,245,0.08);
+}
+.foot-inner {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+}
+.foot-name {
+  font-family: var(--font-display);
+  font-size: 18px; font-weight: 300;
+  color: var(--color-bg); letter-spacing: 0.03em;
+}
+.foot-name span { font-style: italic; color: var(--color-accent); }
+.foot-social { display: flex; gap: 20px; }
+.foot-social a {
+  font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(250,248,245,0.45); transition: color 0.2s;
+}
+.foot-social a:hover { color: var(--color-accent); }
+.foot-copy { font-size: 11px; color: rgba(250,248,245,0.3); letter-spacing: 0.05em; }
+
+/* ============================================================
+   SCROLL REVEAL ANIMATIONS
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.d1 { transition-delay: 0.1s; }
+.d2 { transition-delay: 0.2s; }
+.d3 { transition-delay: 0.3s; }
+.d4 { transition-delay: 0.4s; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1024px) {
+  #hero { grid-template-columns: 1fr; }
+  .hero-visual { height: 56vw; min-height: 320px; max-height: 500px; order: -1; min-height: 0; }
+  .hero-content { padding: 48px 0 64px; order: 2; }
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .about-photo { max-width: 320px; }
+  .con-inner { grid-template-columns: 1fr; gap: 48px; }
+  .serv-grid { grid-template-columns: repeat(2, 1fr); }
+  .work-sub { text-align: left; }
+}
+@media (max-width: 768px) {
+  :root { --gap-sect: 80px; }
+  .nav-links { display: none; }
+  .burger { display: flex; }
+  .nav-right > .lang-wrap { display: none; }
+  #hero { grid-template-columns: 1fr; }
+  .hero-visual { height: 58vw; }
+  .vid-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .serv-grid { grid-template-columns: 1fr 1fr; }
+  .why-grid { grid-template-columns: 1fr; }
+  .test-grid { grid-template-columns: 1fr; }
+  .foot-inner { flex-direction: column; align-items: flex-start; }
+  .work-header { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 480px) {
+  .container { padding: 0 20px; }
+  .vid-grid { grid-template-columns: 1fr; }
+  .hero-actions { flex-direction: column; }
+  .serv-grid { grid-template-columns: 1fr; }
+  .hero-title { font-size: 42px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ============================================================
+     NAVIGATION
+     ============================================================ -->
+<nav id="nav">
+  <div class="container">
+    <div class="nav-inner">
+
+      <a href="#hero" class="nav-logo">Monika<span>.</span></a>
+
+      <ul class="nav-links">
+        <li><a href="#work"     data-i18n="nav_work">Work</a></li>
+        <li><a href="#services" data-i18n="nav_services">Services</a></li>
+        <li><a href="#about"    data-i18n="nav_about">About</a></li>
+        <li><a href="#contact"  data-i18n="nav_contact">Contact</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <div class="lang-wrap">
+          <button class="lang-btn active" onclick="setLang('en')">EN</button>
+          <button class="lang-btn"        onclick="setLang('pl')">PL</button>
+        </div>
+        <button class="burger" id="burger" onclick="toggleMob()" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile drawer -->
+<div class="nav-mob" id="navMob">
+  <a href="#work"     onclick="closeMob()" data-i18n="nav_work">Work</a>
+  <a href="#services" onclick="closeMob()" data-i18n="nav_services">Services</a>
+  <a href="#about"    onclick="closeMob()" data-i18n="nav_about">About</a>
+  <a href="#contact"  onclick="closeMob()" data-i18n="nav_contact">Contact</a>
+  <div class="lang-wrap">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn"        onclick="setLang('pl')">PL</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     SECTION 1: HERO
+     ============================================================ -->
+<section id="hero">
+
+  <div class="container">
+    <div class="hero-content">
+
+      <div class="hero-tag" data-i18n="hero_eyebrow">UGC Creator</div>
+
+      <h1 class="hero-title">Monika<br><em data-i18n="hero_surname">Piotrxwska</em></h1>
+      <p class="hero-role" data-i18n="hero_role">Content Creator</p>
+
+      <p class="hero-desc" data-i18n="hero_desc">
+        I create authentic, visually considered content that helps brands present their products naturally and build genuine connection with their audience.
+      </p>
+
+      <p class="hero-loc" data-i18n="hero_loc">Poland &mdash; Available worldwide</p>
+
+      <div class="hero-actions">
+        <a href="#work"    class="btn btn-dark"  data-i18n="hero_btn1">View my work</a>
+        <a href="#contact" class="btn btn-ghost" data-i18n="hero_btn2">Contact me</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HERO VISUAL -->
+  <!--
+    HOW TO ADD YOUR PHOTO:
+    Replace the entire .hero-ph div below with:
+    <img src="images/hero.jpg" alt="Monika – UGC Creator">
+
+    HOW TO ADD A VIDEO INSTEAD:
+    <video autoplay muted loop playsinline>
+      <source src="videos/hero-reel.mp4" type="video/mp4">
+    </video>
+
+    Recommended: portrait/vertical format, min 800×1200px for photo.
+  -->
+  <div class="hero-visual hero-ph ph-box">
+    <div class="ph-icon">
+      <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+      </svg>
+    </div>
+    <p class="ph-label">Your portrait photo<br>or a short vertical video<br><strong>→ images/hero.jpg</strong></p>
+  </div>
+
+</section>
+
+<!-- ============================================================
+     SECTION 2: SELECTED WORK
+     ============================================================ -->
+<section id="work" class="section">
+  <div class="container">
+
+    <div class="work-header">
+      <div>
+        <span class="eyebrow" data-i18n="work_eyebrow">Selected work</span>
+        <h2 class="h-section" data-i18n="work_heading">Content portfolio</h2>
+      </div>
+      <p class="work-sub" data-i18n="work_sub">Beauty, fashion, lifestyle &amp; wellness<br>Polish and English content</p>
+    </div>
+
+    <div class="vid-grid">
+
+      <!--
+        HOW TO REPLACE EACH VIDEO CARD:
+        1. Add your thumbnail image:   images/thumb-01.jpg
+        2. Replace the .ph-box div inside .vid-thumb with:
+           <img src="images/thumb-01.jpg" alt="Product demonstration">
+        3. In the modal JS array, add the path to your video file
+           (see PORTFOLIO_DATA.videos at the bottom of this file)
+      -->
+
+      <!-- CARD 1 -->
+      <div class="vid-card reveal" onclick="openModal(0)">
+        <div class="vid-thumb">
+          <div class="ph-box ph-grad-1">
+            <!-- Replace with: <img src="images/thumb-01.jpg" alt="Product demonstration"> -->
+            <p class="ph-label">images/thumb-01.jpg</p>
+          </div>
+          <button class="play-btn" aria-label="Play video">
+            <svg width="14" height="16" viewBox="0 0 14 16" fill="var(--color-text)"><path d="M1 1l12 7L1 15V1z"/></svg>
+          </button>
+        </div>
+        <div class="vid-info">
+          <div class="vid-cat"   data-i18n="cat1">Product demonstration</div>
+          <div class="vid-title" data-i18n="vid1_title">In-depth demo</div>
+          <div class="vid-fmt"   data-i18n="vid1_fmt">60 s &mdash; Vertical &mdash; Polish</div>
+        </div>
+      </div>
+
+      <!-- CARD 2 -->
+      <div class="vid-card reveal d1" onclick="openModal(1)">
+        <div class="vid-thumb">
+          <div class="ph-box ph-grad-2">
+            <!-- Replace with: <img src="images/thumb-02.jpg" alt="Voice-over video"> -->
+            <p class="ph-label">images/thumb-02.jpg</p>
+          </div>
+          <button class="play-btn" aria-label="Play video">
+            <svg width="14" height="16" viewBox="0 0 14 16" fill="var(--color-text)"><path d="M1 1l12 7L1 15V1z"/></svg>
+          </button>
+        </div>
+        <div class="vid-info">
+          <div class="vid-cat"   data-i18n="cat2">Voice-over</div>
+          <div class="vid-title" data-i18n="vid2_title">Voice-over video</div>
+          <div class="vid-fmt"   data-i18n="vid2_fmt">30 s &mdash; Vertical &mdash; English</div>
+        </div>
+      </div>
+
+      <!-- CARD 3 -->
+      <div class="vid-card reveal d2" onclick="openModal(2)">
+        <div class="vid-thumb">
+          <div class="ph-box ph-grad-3">
+            <!-- Replace with: <img src="images/thumb-03.jpg" alt="Testimonial"> -->
+            <p class="ph-label">images/thumb-03.jpg</p>
+          </div>
+          <button class="play-btn" aria-label="Play video">
+            <svg width="14" height="16" viewBox="0 0 14 16" fill="var(--color-text)"><path d="M1 1l12 7L1 15V1z"/></svg>
+          </button>
+        </div>
+        <div class="vid-info">
+          <div class="vid-cat"   data-i18n="cat3">Testimonial</div>
+          <div class="vid-title" data-i18n="vid3_title">Honest review</div>
+          <div class="vid-fmt"   data-i18n="vid3_fmt">45 s &mdash; Vertical &mdash; Polish</div>
+        </div>
+      </div>
+
+      <!-- CARD 4 -->
+      <div class="vid-card reveal d1" onclick="openModal(3)">
+        <div class="vid-thumb">
+          <div class="ph-box ph-grad-4">
+            <!-- Replace with: <img src="images/thumb-04.jpg" alt="Unboxing"> -->
+            <p class="ph-label">images/thumb-04.jpg</p>
+          </div>
+          <button class="play-btn" aria-label="Play video">
+            <svg width="14" height="16" viewBox="0 0 14 16" fill="var(--color-text)"><path d="M1 1l12 7L1 15V1z"/></svg>
+          </button>
+        </div>
+        <div class="vid-info">
+          <div class="vid-cat"   data-i18n="cat4">Unboxing</div>
+          <div class="vid-title" data-i18n="vid4_title">Unboxing experience</div>
+          <div class="vid-fmt"   data-i18n="vid4_fmt">90 s &mdash; Vertical &mdash; English</div>
+        </div>
+      </div>
+
+      <!-- CARD 5 -->
+      <div class="vid-card reveal d2" onclick="openModal(4)">
+        <div class="vid-thumb">
+          <div class="ph-box ph-grad-5">
+            <!-- Replace with: <img src="images/thumb-05.jpg" alt="Lifestyle video"> -->
+            <p class="ph-label">images/thumb-05.jpg</p>
+          </div>
+          <button class="play-btn" aria-label="Play video">
+            <svg width="14" height="16" viewBox="0 0 14 16" fill="var(--color-text)"><path d="M1 1l12 7L1 15V1z"/></svg>
+          </button>
+        </div>
+        <div class="vid-info">
+          <div class="vid-cat"   data-i18n="cat5">Lifestyle video</div>
+          <div class="vid-title" data-i18n="vid5_title">Day-in-the-life</div>
+          <div class="vid-fmt"   data-i18n="vid5_fmt">60 s &mdash; Vertical &mdash; Polish</div>
+        </div>
+      </div>
+
+      <!-- CARD 6 -->
+      <div class="vid-card reveal d3" onclick="openModal(5)">
+        <div class="vid-thumb">
+          <div class="ph-box ph-grad-6">
+            <!-- Replace with: <img src="images/thumb-06.jpg" alt="Aesthetic product shots"> -->
+            <p class="ph-label">images/thumb-06.jpg</p>
+          </div>
+          <button class="play-btn" aria-label="Play video">
+            <svg width="14" height="16" viewBox="0 0 14 16" fill="var(--color-text)"><path d="M1 1l12 7L1 15V1z"/></svg>
+          </button>
+        </div>
+        <div class="vid-info">
+          <div class="vid-cat"   data-i18n="cat6">Aesthetic product shots</div>
+          <div class="vid-title" data-i18n="vid6_title">Product aesthetic</div>
+          <div class="vid-fmt"   data-i18n="vid6_fmt">45 s &mdash; Vertical &mdash; English</div>
+        </div>
+      </div>
+
+    </div><!-- /vid-grid -->
+  </div>
+</section>
+
+<!-- VIDEO MODAL -->
+<!--
+  HOW TO SHOW A REAL VIDEO IN THE MODAL:
+  In the PORTFOLIO_DATA.videos array (at the bottom of the file),
+  set the path for each video, e.g.:
+    { src: "videos/video-01.mp4", type: "mp4" }
+  For Vimeo/YouTube, set type: "iframe" and paste the embed URL as src.
+  The modal code below handles both automatically.
+-->
+<div class="modal-bg" id="modalBg" onclick="closeModal(event)">
+  <div class="modal-box" id="modalBox">
+    <button class="modal-close" onclick="closeModal(null,true)" aria-label="Close">&#x2715;</button>
+    <div class="modal-ph-title" id="modalTitle">Video preview</div>
+    <p class="modal-ph-text" id="modalHint">
+      Add your video file to<br>
+      <strong>videos/video-XX.mp4</strong><br>
+      then update PORTFOLIO_DATA.videos
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================
+     SECTION 3: SERVICES
+     ============================================================ -->
+<section id="services" class="section">
+  <div class="container">
+
+    <span class="eyebrow" data-i18n="serv_eyebrow">What I offer</span>
+    <h2 class="h-section reveal" data-i18n="serv_heading">Services</h2>
+
+    <div class="serv-grid reveal">
+      <div class="serv-item"><div class="serv-num">01</div><div class="serv-name" data-i18n="s1">UGC videos</div></div>
+      <div class="serv-item"><div class="serv-num">02</div><div class="serv-name" data-i18n="s2">Product demonstrations</div></div>
+      <div class="serv-item"><div class="serv-num">03</div><div class="serv-name" data-i18n="s3">Testimonials</div></div>
+      <div class="serv-item"><div class="serv-num">04</div><div class="serv-name" data-i18n="s4">Unboxing videos</div></div>
+      <div class="serv-item"><div class="serv-num">05</div><div class="serv-name" data-i18n="s5">Voice-over videos</div></div>
+      <div class="serv-item"><div class="serv-num">06</div><div class="serv-name" data-i18n="s6">Lifestyle content</div></div>
+      <div class="serv-item"><div class="serv-num">07</div><div class="serv-name" data-i18n="s7">Product photography</div></div>
+      <div class="serv-item"><div class="serv-num">08</div><div class="serv-name" data-i18n="s8">Scriptwriting</div></div>
+      <div class="serv-item"><div class="serv-num">09</div><div class="serv-name" data-i18n="s9">Hooks &amp; CTA variations</div></div>
+      <div class="serv-item"><div class="serv-num">10</div><div class="serv-name" data-i18n="s10">Raw footage</div></div>
+      <div class="serv-item"><div class="serv-num">11</div><div class="serv-name" data-i18n="s11">Organic content</div></div>
+      <div class="serv-item"><div class="serv-num">12</div><div class="serv-name" data-i18n="s12">Paid ads content</div></div>
+    </div>
+
+    <p class="serv-note reveal" data-i18n="serv_note">
+      Packages and pricing are tailored to the scope of the project, number of deliverables and usage rights.
+    </p>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 4: WHY WORK WITH ME
+     ============================================================ -->
+<section id="why" class="section">
+  <div class="container">
+
+    <span class="eyebrow" data-i18n="why_eyebrow">Why work with me</span>
+    <h2 class="h-section reveal" data-i18n="why_heading">What sets my work apart</h2>
+
+    <div class="why-grid">
+      <div class="why-item reveal">
+        <h3 class="why-h" data-i18n="why1_h">Natural on camera</h3>
+        <p class="why-b" data-i18n="why1_b">Authentic delivery and natural communication that keeps the viewer watching. No forced scripts, no overly polished performance.</p>
+      </div>
+      <div class="why-item reveal d1">
+        <h3 class="why-h" data-i18n="why2_h">Aesthetic product presentation</h3>
+        <p class="why-b" data-i18n="why2_b">Every frame is considered. Products are shown in a visual context that elevates the brand rather than overshadowing it.</p>
+      </div>
+      <div class="why-item reveal d2">
+        <h3 class="why-h" data-i18n="why3_h">Tailored to your visual identity</h3>
+        <p class="why-b" data-i18n="why3_b">Content that adapts to the brand's tone, colour palette and style, so it feels at home in any feed or ad campaign.</p>
+      </div>
+      <div class="why-item reveal d3">
+        <h3 class="why-h" data-i18n="why4_h">Full creative production</h3>
+        <p class="why-b" data-i18n="why4_b">Concept, script, filming and editing handled entirely in one place. Fewer revision rounds, faster delivery.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 5: ABOUT
+     ============================================================ -->
+<section id="about" class="section">
+  <div class="container">
+    <div class="about-grid">
+
+      <!-- PHOTO -->
+      <div class="about-photo reveal">
+        <!--
+          HOW TO ADD YOUR PHOTO:
+          Replace the .ph-box div below with:
+          <img src="images/about.jpg" alt="Monika, UGC Creator">
+          Recommended: portrait, min 720×960px.
+        -->
+        <div class="ph-box about-ph">
+          <svg width="34" height="34" fill="none" stroke="var(--color-muted)" stroke-width="1" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+          <p class="ph-label">images/about.jpg</p>
+        </div>
+      </div>
+
+      <div class="reveal d1">
+        <span class="eyebrow" data-i18n="about_eyebrow">About me</span>
+        <h2 class="h-section" style="margin-bottom:24px" data-i18n="about_heading">Hi, I&rsquo;m Monika</h2>
+        <div class="divider"></div>
+        <p class="about-body" data-i18n="about_body">
+          I'm a <em>UGC creator</em> based in Poland, working with brands across beauty, fashion, lifestyle and wellness. I believe great content doesn't need to feel like an ad. My work focuses on genuine, considered storytelling that earns attention and builds trust between a brand and its audience.
+        </p>
+        <div class="meta-list">
+          <div class="meta-row"><span class="meta-key" data-i18n="m_loc">Location</span><span class="meta-val" data-i18n="m_loc_v">Poland &mdash; worldwide</span></div>
+          <div class="meta-row"><span class="meta-key" data-i18n="m_lang">Languages</span><span class="meta-val" data-i18n="m_lang_v">Polish, English</span></div>
+          <div class="meta-row"><span class="meta-key" data-i18n="m_niche">Niches</span><span class="meta-val" data-i18n="m_niche_v">Beauty, Fashion, Lifestyle, Wellness, Home</span></div>
+          <div class="meta-row"><span class="meta-key" data-i18n="m_fmt">Formats</span><span class="meta-val" data-i18n="m_fmt_v">TikTok, Reels, Ads</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 6: BRANDS
+     To HIDE: set showBrands: false in PORTFOLIO_DATA below
+     ============================================================ -->
+<section id="brands">
+  <div class="container">
+    <span class="eyebrow" data-i18n="brands_eyebrow">Brands</span>
+    <p style="font-size:14px;color:var(--color-muted);max-width:440px;line-height:1.75" data-i18n="brands_sub">
+      A selection of brands and categories I have created content for.
+    </p>
+    <div class="brands-grid reveal">
+      <!--
+        HOW TO ADD BRAND LOGOS:
+        Replace each .brand-logo div content with an <img> tag, e.g.:
+        <div class="brand-logo"><img src="images/brand-sephora.png" alt="Sephora"></div>
+        Recommended: PNG with transparent background, ~300×100px.
+        Add or remove .brand-logo items as needed.
+      -->
+      <div class="brand-logo" data-i18n="brand_ph">Brand logo</div>
+      <div class="brand-logo" data-i18n="brand_ph">Brand logo</div>
+      <div class="brand-logo" data-i18n="brand_ph">Brand logo</div>
+      <div class="brand-logo" data-i18n="brand_ph">Brand logo</div>
+      <div class="brand-logo" data-i18n="brand_ph">Brand logo</div>
+      <div class="brand-logo" data-i18n="brand_ph">Brand logo</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 7: TESTIMONIALS
+     To HIDE: set showTestimonials: false in PORTFOLIO_DATA below
+     ============================================================ -->
+<section id="testimonials">
+  <div class="container">
+    <span class="eyebrow" data-i18n="test_eyebrow">Testimonials</span>
+    <h2 class="h-section reveal" data-i18n="test_heading">What clients say</h2>
+    <div class="test-grid">
+      <!--
+        HOW TO ADD REAL TESTIMONIALS:
+        In the i18n object below, replace the placeholder values for
+        test1_text, test1_name, test1_brand (and same for test2, test3)
+        with real content in both 'en' and 'pl' blocks.
+      -->
+      <div class="test-card reveal">
+        <div class="test-text"  data-i18n="test1_text">Add client testimonial here</div>
+        <div class="test-name"  data-i18n="test1_name">Client name</div>
+        <div class="test-brand" data-i18n="test1_brand">Brand or agency</div>
+      </div>
+      <div class="test-card reveal d1">
+        <div class="test-text"  data-i18n="test2_text">Add client testimonial here</div>
+        <div class="test-name"  data-i18n="test2_name">Client name</div>
+        <div class="test-brand" data-i18n="test2_brand">Brand or agency</div>
+      </div>
+      <div class="test-card reveal d2">
+        <div class="test-text"  data-i18n="test3_text">Add client testimonial here</div>
+        <div class="test-name"  data-i18n="test3_name">Client name</div>
+        <div class="test-brand" data-i18n="test3_brand">Brand or agency</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 8: CONTACT
+     ============================================================ -->
+<section id="contact">
+  <div class="container">
+    <div class="con-inner">
+
+      <div>
+        <h2 class="con-heading">
+          <span data-i18n="con_h1">Let&rsquo;s create content</span><br>
+          <em data-i18n="con_h2">your audience will want to watch.</em>
+        </h2>
+        <p class="con-sub" data-i18n="con_sub">
+          Open to collaborations with brands, agencies and marketing teams worldwide. Comfortable working in Polish and English.
+        </p>
+      </div>
+
+      <div>
+        <div class="con-details">
+
+          <div class="con-row">
+            <div class="con-icon">
+              <svg width="14" height="14" fill="none" stroke="rgba(250,248,245,0.55)" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </div>
+            <div>
+              <div class="con-key" data-i18n="con_email_key">Email</div>
+              <div class="con-val"><a href="mailto:piotrxwskabusiness@gmail.com">piotrxwskabusiness@gmail.com</a></div>
+            </div>
+          </div>
+
+          <div class="con-row">
+            <div class="con-icon">
+              <svg width="14" height="14" fill="none" stroke="rgba(250,248,245,0.55)" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5"/>
+                <circle cx="12" cy="12" r="3.5"/>
+                <circle cx="17.5" cy="6.5" r="1" fill="rgba(250,248,245,0.55)"/>
+              </svg>
+            </div>
+            <div>
+              <div class="con-key">Instagram</div>
+              <div class="con-val"><a href="https://instagram.com/piotrxwskaa" target="_blank" rel="noopener">@piotrxwskaa</a></div>
+            </div>
+          </div>
+
+          <div class="con-row">
+            <div class="con-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(250,248,245,0.55)" aria-hidden="true">
+                <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.74a8.28 8.28 0 004.83 1.55V6.85a4.85 4.85 0 01-1.06-.16z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="con-key">TikTok</div>
+              <div class="con-val"><a href="https://tiktok.com/@piotrxwskaa" target="_blank" rel="noopener">@piotrxwskaa</a></div>
+            </div>
+          </div>
+
+          <div class="con-row">
+            <div class="con-icon">
+              <svg width="14" height="14" fill="none" stroke="rgba(250,248,245,0.55)" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                <circle cx="12" cy="9" r="2.5"/>
+              </svg>
+            </div>
+            <div>
+              <div class="con-key" data-i18n="con_loc_key">Location</div>
+              <div class="con-val" data-i18n="con_loc_v">Poland &mdash; available worldwide</div>
+            </div>
+          </div>
+
+        </div><!-- /con-details -->
+
+        <div class="con-actions">
+          <a href="mailto:piotrxwskabusiness@gmail.com" class="btn-con-fill" data-i18n="con_btn1">Send me an email</a>
+          <a href="https://instagram.com/piotrxwskaa" target="_blank" rel="noopener" class="btn-con-out" data-i18n="con_btn2">Follow on Instagram</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer>
+  <div class="container">
+    <div class="foot-inner">
+      <div class="foot-name">Monika <span>Piotrxwska</span> &mdash; UGC Creator</div>
+      <div class="foot-social">
+        <a href="https://instagram.com/piotrxwskaa"  target="_blank" rel="noopener">Instagram</a>
+        <a href="https://tiktok.com/@piotrxwskaa"    target="_blank" rel="noopener">TikTok</a>
+      </div>
+      <div class="foot-copy">
+        &copy; <span id="yr"></span> Monika Piotrxwska. All rights reserved.
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+/* ================================================================
+   PORTFOLIO_DATA
+   Edit this object to update contact info and toggle sections.
+   ================================================================ */
+const PORTFOLIO_DATA = {
+  email:     'piotrxwskabusiness@gmail.com',
+  instagram: 'piotrxwskaa',
+  tiktok:    'piotrxwskaa',
+
+  /* Set false to hide a section without deleting its code */
+  showBrands:       true,
+  showTestimonials: true,
+
+  /* -------------------------------------------------------
+     VIDEO SOURCES — fill in when you have your files ready.
+     For local files use relative path:  "videos/video-01.mp4"
+     For Vimeo embed use full iframe URL: "https://player.vimeo.com/video/XXXXXXX"
+     type: "mp4" | "iframe"
+     Leave src: "" to keep the placeholder modal.
+  ------------------------------------------------------- */
+  videos: [
+    { src: '', type: 'mp4', label: 'Product demonstration'   },
+    { src: '', type: 'mp4', label: 'Voice-over video'        },
+    { src: '', type: 'mp4', label: 'Testimonial'             },
+    { src: '', type: 'mp4', label: 'Unboxing experience'     },
+    { src: '', type: 'mp4', label: 'Day-in-the-life'         },
+    { src: '', type: 'mp4', label: 'Aesthetic product shots' }
+  ]
+};
+
+/* ================================================================
+   i18n — TRANSLATIONS
+   Edit text in both 'en' and 'pl' blocks to update copy.
+   ================================================================ */
+const i18n = {
+  en: {
+    nav_work: 'Work', nav_services: 'Services', nav_about: 'About', nav_contact: 'Contact',
+    hero_eyebrow: 'UGC Creator',
+    hero_surname: 'Piotrxwska',
+    hero_role: 'Content Creator',
+    hero_desc: 'I create authentic, visually considered content that helps brands present their products naturally and build genuine connection with their audience.',
+    hero_loc: 'Poland \u2014 Available worldwide',
+    hero_btn1: 'View my work',
+    hero_btn2: 'Contact me',
+    work_eyebrow: 'Selected work',
+    work_heading: 'Content portfolio',
+    work_sub: 'Beauty, fashion, lifestyle \u0026 wellness\u003cbr\u003ePolish and English content',
+    cat1: 'Product demonstration', vid1_title: 'In-depth demo',        vid1_fmt: '60 s \u2014 Vertical \u2014 Polish',
+    cat2: 'Voice-over',           vid2_title: 'Voice-over video',       vid2_fmt: '30 s \u2014 Vertical \u2014 English',
+    cat3: 'Testimonial',          vid3_title: 'Honest review',          vid3_fmt: '45 s \u2014 Vertical \u2014 Polish',
+    cat4: 'Unboxing',             vid4_title: 'Unboxing experience',    vid4_fmt: '90 s \u2014 Vertical \u2014 English',
+    cat5: 'Lifestyle video',      vid5_title: 'Day-in-the-life',        vid5_fmt: '60 s \u2014 Vertical \u2014 Polish',
+    cat6: 'Aesthetic product shots', vid6_title: 'Product aesthetic',   vid6_fmt: '45 s \u2014 Vertical \u2014 English',
+    serv_eyebrow: 'What I offer',
+    serv_heading: 'Services',
+    s1:'UGC videos', s2:'Product demonstrations', s3:'Testimonials', s4:'Unboxing videos',
+    s5:'Voice-over videos', s6:'Lifestyle content', s7:'Product photography', s8:'Scriptwriting',
+    s9:'Hooks \u0026 CTA variations', s10:'Raw footage', s11:'Organic content', s12:'Paid ads content',
+    serv_note: 'Packages and pricing are tailored to the scope of the project, number of deliverables and usage rights.',
+    why_eyebrow: 'Why work with me',
+    why_heading: 'What sets my work apart',
+    why1_h: 'Natural on camera',
+    why1_b: 'Authentic delivery and natural communication that keeps the viewer watching. No forced scripts, no overly polished performance.',
+    why2_h: 'Aesthetic product presentation',
+    why2_b: 'Every frame is considered. Products are shown in a visual context that elevates the brand rather than overshadowing it.',
+    why3_h: 'Tailored to your visual identity',
+    why3_b: "Content that adapts to the brand\u2019s tone, colour palette and style, so it feels at home in any feed or ad campaign.",
+    why4_h: 'Full creative production',
+    why4_b: 'Concept, script, filming and editing handled entirely in one place. Fewer revision rounds, faster delivery.',
+    about_eyebrow: 'About me',
+    about_heading: "Hi, I\u2019m Monika",
+    about_body: "I\u2019m a <em>UGC creator</em> based in Poland, working with brands across beauty, fashion, lifestyle and wellness. I believe great content doesn\u2019t need to feel like an ad. My work focuses on genuine, considered storytelling that earns attention and builds trust between a brand and its audience.",
+    m_loc: 'Location',  m_loc_v: 'Poland \u2014 worldwide',
+    m_lang: 'Languages', m_lang_v: 'Polish, English',
+    m_niche: 'Niches',  m_niche_v: 'Beauty, Fashion, Lifestyle, Wellness, Home',
+    m_fmt: 'Formats',   m_fmt_v: 'TikTok, Reels, Ads',
+    brands_eyebrow: 'Brands',
+    brands_sub: 'A selection of brands and categories I have created content for.',
+    brand_ph: 'Brand logo',
+    test_eyebrow: 'Testimonials',
+    test_heading: 'What clients say',
+    test1_text: 'Add client testimonial here', test1_name: 'Client name', test1_brand: 'Brand or agency',
+    test2_text: 'Add client testimonial here', test2_name: 'Client name', test2_brand: 'Brand or agency',
+    test3_text: 'Add client testimonial here', test3_name: 'Client name', test3_brand: 'Brand or agency',
+    con_h1: 'Let\u2019s create content',
+    con_h2: 'your audience will want to watch.',
+    con_sub: 'Open to collaborations with brands, agencies and marketing teams worldwide. Comfortable working in Polish and English.',
+    con_email_key: 'Email',
+    con_loc_key: 'Location', con_loc_v: 'Poland \u2014 available worldwide',
+    con_btn1: 'Send me an email',
+    con_btn2: 'Follow on Instagram'
+  },
+
+  pl: {
+    nav_work: 'Realizacje', nav_services: 'Us\u0142ugi', nav_about: 'O mnie', nav_contact: 'Kontakt',
+    hero_eyebrow: 'Tw\u00f3rczyni UGC',
+    hero_surname: 'Piotrxwska',
+    hero_role: 'Content Creator',
+    hero_desc: 'Tworz\u0119 autentyczne, wizualnie dopracowane tre\u015bci, kt\u00f3re pomagaj\u0105 markom prezentowa\u0107 produkty w naturalny spos\u00f3b i budowa\u0107 prawdziwe relacje z odbiorcami.',
+    hero_loc: 'Polska \u2014 dost\u0119pna na ca\u0142ym \u015bwiecie',
+    hero_btn1: 'Zobacz realizacje',
+    hero_btn2: 'Napisz do mnie',
+    work_eyebrow: 'Wybrane realizacje',
+    work_heading: 'Portfolio',
+    work_sub: 'Beauty, moda, lifestyle i wellness\u003cbr\u003eTre\u015bci po polsku i po angielsku',
+    cat1: 'Demonstracja produktu', vid1_title: 'Demonstracja',       vid1_fmt: '60 s \u2014 Pionowe \u2014 Polski',
+    cat2: 'Voice-over',            vid2_title: 'Voice-over',          vid2_fmt: '30 s \u2014 Pionowe \u2014 Angielski',
+    cat3: 'Testimonial',           vid3_title: 'Recenzja',            vid3_fmt: '45 s \u2014 Pionowe \u2014 Polski',
+    cat4: 'Unboxing',              vid4_title: 'Unboxing',            vid4_fmt: '90 s \u2014 Pionowe \u2014 Angielski',
+    cat5: 'Wideo lifestyle',       vid5_title: 'Dzie\u0144 z \u017cycia', vid5_fmt: '60 s \u2014 Pionowe \u2014 Polski',
+    cat6: 'Estetyczne uj\u0119cia produkt\u00f3w', vid6_title: 'Estetyka produktu', vid6_fmt: '45 s \u2014 Pionowe \u2014 Angielski',
+    serv_eyebrow: 'Co oferuj\u0119',
+    serv_heading: 'Us\u0142ugi',
+    s1:'Wideo UGC', s2:'Demonstracje produkt\u00f3w', s3:'Testimoniale', s4:'Filmiki unboxing',
+    s5:'Wideo z voice-over', s6:'Tre\u015bci lifestyle', s7:'Fotografia produktowa', s8:'Scenariusze',
+    s9:'Hooki i warianty CTA', s10:'Surowe nagrania', s11:'Tre\u015bci organiczne', s12:'Reklamy p\u0142atne',
+    serv_note: 'Pakiety i ceny s\u0105 dostosowywane do zakresu projektu, liczby materia\u0142\u00f3w i praw do u\u017cytkowania.',
+    why_eyebrow: 'Dlaczego warto wsp\u00f3\u0142pracowa\u0107',
+    why_heading: 'Co wyr\u00f3\u017cnia moje tre\u015bci',
+    why1_h: 'Naturalna przed kamer\u0105',
+    why1_b: 'Autentyczny przekaz i naturalna komunikacja, kt\u00f3re przykuwaj\u0105 uwag\u0119 widza. Bez wymuszonych skrypt\u00f3w i przesadnie wypolerowanego wizerunku.',
+    why2_h: 'Estetyczna prezentacja produkt\u00f3w',
+    why2_b: 'Ka\u017cda klatka jest przemy\u015blana. Produkty s\u0105 pokazywane w kontek\u015bcie wizualnym, kt\u00f3ry wzmacnia mark\u0119, zamiast j\u0105 przyt\u0142acza\u0107.',
+    why3_h: 'Dopasowanie do identyfikacji marki',
+    why3_b: 'Tre\u015bci, kt\u00f3re dostosowuj\u0105 si\u0119 do tonu, palety kolor\u00f3w i stylu marki, by naturalnie wpisywa\u0142y si\u0119 w ka\u017cdy feed lub kampani\u0119.',
+    why4_h: 'Kompletna produkcja kreatywna',
+    why4_b: 'Koncepcja, skrypt, nagranie i monta\u017c \u2014 wszystko w jednym miejscu. Mniej poprawek, szybsze dostarczenie.',
+    about_eyebrow: 'O mnie',
+    about_heading: 'Cze\u015b\u0107, jestem Monika',
+    about_body: 'Jestem tw\u00f3rczyni\u0105 UGC z Polski, tworz\u0105c\u0105 tre\u015bci dla marek z bran\u017cy beauty, mody, lifestyle i wellness. Wierz\u0119, \u017ce \u015bwietny content nie musi wygl\u0105da\u0107 jak reklama. Skupiam si\u0119 na autentycznym storytellingu, kt\u00f3ry buduje zaufanie mi\u0119dzy mark\u0105 a jej odbiorcami.',
+    m_loc: 'Lokalizacja', m_loc_v: 'Polska \u2014 ca\u0142y \u015bwiat',
+    m_lang: 'J\u0119zyki', m_lang_v: 'Polski, Angielski',
+    m_niche: 'Bran\u017ce', m_niche_v: 'Beauty, Moda, Lifestyle, Wellness, Dom',
+    m_fmt: 'Formaty', m_fmt_v: 'TikTok, Reels, Reklamy',
+    brands_eyebrow: 'Marki',
+    brands_sub: 'Wybrane marki i kategorie, dla kt\u00f3rych tworzy\u0142am tre\u015bci.',
+    brand_ph: 'Logo marki',
+    test_eyebrow: 'Opinie',
+    test_heading: 'Co m\u00f3wi\u0105 klienci',
+    test1_text: 'Dodaj opini\u0119 klienta', test1_name: 'Imi\u0119 klienta', test1_brand: 'Marka lub agencja',
+    test2_text: 'Dodaj opini\u0119 klienta', test2_name: 'Imi\u0119 klienta', test2_brand: 'Marka lub agencja',
+    test3_text: 'Dodaj opini\u0119 klienta', test3_name: 'Imi\u0119 klienta', test3_brand: 'Marka lub agencja',
+    con_h1: 'Stw\u00f3rzmy tre\u015bci,',
+    con_h2: 'kt\u00f3re Twoi odbiorcy b\u0119d\u0105 chcieli ogl\u0105da\u0107.',
+    con_sub: 'Otwarta na wsp\u00f3\u0142prac\u0119 z markami, agencjami i zespo\u0142ami marketingowymi na ca\u0142ym \u015bwiecie. Tworz\u0119 po polsku i po angielsku.',
+    con_email_key: 'E-mail',
+    con_loc_key: 'Lokalizacja', con_loc_v: 'Polska \u2014 dost\u0119pna na ca\u0142ym \u015bwiecie',
+    con_btn1: 'Napisz do mnie',
+    con_btn2: 'Obserwuj na Instagramie'
+  }
+};
+
+/* ================================================================
+   LANGUAGE SWITCHER
+   ================================================================ */
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  const t = i18n[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (t[k] !== undefined) el.innerHTML = t[k];
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.trim().toLowerCase() === lang);
+  });
+  document.documentElement.lang = lang;
+}
+
+/* ================================================================
+   NAVIGATION
+   ================================================================ */
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 10);
+});
+
+function toggleMob() {
+  document.getElementById('burger').classList.toggle('open');
+  document.getElementById('navMob').classList.toggle('open');
+}
+function closeMob() {
+  document.getElementById('burger').classList.remove('open');
+  document.getElementById('navMob').classList.remove('open');
+}
+
+/* ================================================================
+   VIDEO MODAL
+   ================================================================ */
+function openModal(idx) {
+  const v = PORTFOLIO_DATA.videos[idx];
+  const box = document.getElementById('modalBox');
+  const title = document.getElementById('modalTitle');
+  const hint  = document.getElementById('modalHint');
+
+  /* Remove any previous media element */
+  box.querySelectorAll('video, iframe').forEach(el => el.remove());
+
+  title.textContent = v ? v.label : 'Video';
+
+  if (v && v.src) {
+    hint.style.display = 'none';
+    title.style.display = 'none';
+    if (v.type === 'iframe') {
+      const fr = document.createElement('iframe');
+      fr.src = v.src;
+      fr.allow = 'autoplay; fullscreen';
+      fr.allowFullscreen = true;
+      box.appendChild(fr);
+    } else {
+      const vid = document.createElement('video');
+      vid.src = v.src;
+      vid.controls = true;
+      vid.autoplay = true;
+      vid.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;';
+      box.appendChild(vid);
+    }
+  } else {
+    hint.style.display = '';
+    title.style.display = '';
+    hint.innerHTML = 'Add your video file to<br><strong>videos/video-0' + (idx+1) + '.mp4</strong><br>and update PORTFOLIO_DATA.videos';
+  }
+
+  document.getElementById('modalBg').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e, force) {
+  if (force || (e && e.target === document.getElementById('modalBg'))) {
+    document.getElementById('modalBg').classList.remove('open');
+    document.body.style.overflow = '';
+    document.getElementById('modalBox').querySelectorAll('video, iframe').forEach(el => el.remove());
+    document.getElementById('modalTitle').style.display = '';
+    document.getElementById('modalHint').style.display = '';
+  }
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(null, true); });
+
+/* ================================================================
+   SCROLL REVEAL
+   ================================================================ */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      obs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ================================================================
+   FOOTER YEAR
+   ================================================================ */
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* ================================================================
+   SECTION VISIBILITY
+   ================================================================ */
+if (!PORTFOLIO_DATA.showBrands) {
+  const el = document.getElementById('brands');
+  if (el) el.style.display = 'none';
+}
+if (!PORTFOLIO_DATA.showTestimonials) {
+  const el = document.getElementById('testimonials');
+  if (el) el.style.display = 'none';
+}
+</script>
+
+</body>
+</html>
